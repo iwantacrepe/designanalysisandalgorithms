@@ -1,0 +1,66 @@
+#include <iostream>
+
+void swap(int* a, int* b) {
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+int partition(int arr[], int low, int high) {
+    int pivot = arr[high];  // Pivot is the last element
+    int i = low - 1;        // Pointer for greater element
+    int j = high;           // Pointer for smaller element
+
+    while (true) {
+        // Increment the lower pointer till you find an element greater than the pivot
+        do {
+            i++;
+        } while (arr[i] < pivot);
+
+        // Decrement the higher pointer till you find an element less than the pivot
+        do {
+            j--;
+        } while (j >= low && arr[j] > pivot);
+
+        // If the two pointers meet, break the loop
+        if (i >= j) break;
+
+        // Swap elements at i and j
+        swap(&arr[i], &arr[j]);
+    }
+
+    // Swap the pivot element with element at i (where the greater elements start)
+    swap(&arr[i], &arr[high]);
+
+    return i;
+}
+
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        // pi is partitioning index, arr[pi] is now at right place
+        int pi = partition(arr, low, high);
+
+        // Recursively sort elements before partition and after partition
+        quickSort(arr, low, pi - 1);
+        quickSort(arr, pi + 1, high);
+    }
+}
+
+void printArray(int arr[], int size) {
+    for (int i = 0; i < size; i++) {
+        std::cout << arr[i] << " ";
+    }
+    std::cout << std::endl;
+}
+
+int main() {
+    int arr[] = {10, 7, 8, 9, 1, 5};
+    int n = sizeof(arr) / sizeof(arr[0]);
+
+    quickSort(arr, 0, n - 1);
+
+    std::cout << "Sorted array: ";
+    printArray(arr, n);
+
+    return 0;
+}
